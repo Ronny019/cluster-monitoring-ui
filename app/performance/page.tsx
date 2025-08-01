@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import ChevronDownIcon from "../components/ChevronDownIcon";
 import {
   ResponsiveContainer,
@@ -10,24 +10,9 @@ import {
   Tooltip,
   CartesianGrid,
 } from "recharts";
-import { read, write } from "fs";
+import axios from "axios";
 import { useCluster } from "../context/ClusterContext"; // adjust path as needed
-
-const IOPSData = [
-  { date: "Jul 01", read: 20000, write: 10000 },
-  { date: "Jul 02", read: 40000, write: 40000 },
-  { date: "Jul 03", read: 60000, write: 30000 },
-  { date: "Jul 04", read: 80000, write: 20000 },
-  { date: "Jul 05", read: 100000, write: 50000 },
-];
-// New data for second graph (Throughput in GB/s)
-const throughputData = [
-  { date: "Jul 01", read: 0.5, write: 0.2 },
-  { date: "Jul 02", read: 1.0, write: 0.8 },
-  { date: "Jul 03", read: 1.5, write: 1.2 },
-  { date: "Jul 04", read: 2.0, write: 1.7 },
-  { date: "Jul 05", read: 2.0, write: 1.9 },
-];
+import { format, parseISO } from "date-fns";
 
 function yTickFormatter(value: number) {
   return `${value / 1000}k`;
@@ -37,31 +22,64 @@ function throughputTickFormatter(value: number) {
   return `${value} GB/s`;
 }
 
+// Helper to show only first, last, and a few in between
+function getSparseTickFormatter(data: any[]) {
+  if (!data || data.length === 0) return () => "";
+  const total = data.length;
+  // Show first, last, and 3 in between (adjust as needed)
+  const showIndexes = new Set([
+    0,
+    Math.floor(total / 4),
+    Math.floor(total / 2),
+    Math.floor((3 * total) / 4),
+    total - 1,
+  ]);
+  return (value: string, index: number) => {
+    if (showIndexes.has(index)) {
+      try {
+        return format(parseISO(value), "MMM dd");
+      } catch {
+        return value;
+      }
+    }
+    return "";
+  };
+}
+
 export default function Performance() {
   const { selectedCluster } = useCluster();
   const [selected, setSelected] = useState("Last 7 days");
-  const [ReadIOPS, setReadIOPS] = useState<number | null>(0);
-  const [WriteIOPS, setWriteIOPS] = useState<number | null>(0);
-  const [ReadThroughput, setReadThroughput] = useState<number | null>(null);
-  const [WriteThroughput, setWriteThroughput] = useState<number | null>(null);
-//   const datapoints = useActiveTooltipDataPoints();
+  const [IOPSData, setIOPSData] = useState<any[]>([]);
+  const [throughputData, setThroughputData] = useState<any[]>([]);
 
-  // Update IOPS values on hover
-  const handleIOPSMouseMove = (state: any) => {
-    // const datapoints = useActiveTooltipDataPoints();
-    // if (state) {
-    //   setReadIOPS(state.activePayload[0].value);
-    //   setWriteIOPS(state.activePayload[1].value);
-    // }
-  };
+  // Fetch IOPS and Throughput data when selectedCluster changes
+  useEffect(() => {
+    if (!selectedCluster) return;
 
-  // Update Throughput values on hover
-  const handleThroughputMouseMove = (state: any) => {
-    // if (state && state.activePayload && state.activePayload.length >= 2) {
-    //   setReadThroughput(state.activePayload[0].value);
-    //   setWriteThroughput(state.activePayload[1].value);
-    // }
-  };
+    axios
+      .get(`http://127.0.0.1:3333/data/timeseries?cluster_id=${selectedCluster}&type=IOPS`)
+      .then(res => {
+        // Expecting: { data: [{ datetime, read, write }, ...] }
+        setIOPSData(res.data[0].data || []);
+      })
+      .catch(err => {
+        setIOPSData([]);
+        console.error("Error fetching IOPS data:", err);
+      });
+
+    axios
+      .get(`http://127.0.0.1:3333/data/timeseries?cluster_id=${selectedCluster}&type=Throughput`)
+      .then(res => {
+        setThroughputData(res.data[0].data || []);
+      })
+      .catch(err => {
+        setThroughputData([]);
+        console.error("Error fetching Throughput data:", err);
+      });
+  }, [selectedCluster]);
+
+  const iopsTickFormatter = useMemo(() => getSparseTickFormatter(IOPSData), [IOPSData]);
+  const throughputTickFormatterX = useMemo(() => getSparseTickFormatter(throughputData), [throughputData]);
 
   return (
     <div className="flex flex-col min-h-screen bg-[#1B222B] overflow-hidden">
@@ -95,15 +113,17 @@ export default function Performance() {
           {/* Graph plot section (bottom 75%) */}
           <div className="h-[75%] w-full flex items-center justify-center" style={{ background: "#1B222C" }}>
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={IOPSData} onMouseMove={handleIOPSMouseMove}>
+              <LineChart data={IOPSData}>
                 <CartesianGrid stroke="#373F48" strokeDasharray="0" vertical={false} />
                 <XAxis
-                  dataKey="date"
+                  dataKey="datetime"
                   type="category"
                   allowDuplicatedCategory={false}
                   tick={{ fill: "#C7CACC", fontFamily: "Nunito", fontSize: 12 }}
                   axisLine={{ stroke: "#373F48" }}
                   tickLine={false}
+                  interval="preserveStartEnd"
+                  tickFormatter={iopsTickFormatter}
                 />
                 <YAxis
                   tickFormatter={yTickFormatter}
@@ -114,8 +134,8 @@ export default function Performance() {
                   tickLine={false}
                 />
                 <Tooltip />
-                <Line type="monotone" dataKey="read" data={IOPSData} stroke="#AA7EDD" strokeWidth={2} dot={false} name="Source 1" />
-                <Line type="monotone" dataKey="write" data={IOPSData} stroke="#00A3CA" strokeWidth={2} dot={false} name="Source 2" />
+                <Line type="monotone" dataKey="read" stroke="#AA7EDD" strokeWidth={2} dot={false} name="Read" />
+                <Line type="monotone" dataKey="write" stroke="#00A3CA" strokeWidth={2} dot={false} name="Write" />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -168,15 +188,17 @@ export default function Performance() {
           {/* Graph plot section (bottom 75%) */}
           <div className="h-[75%] w-full flex items-center justify-center" style={{ background: "#1B222C" }}>
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={throughputData} onMouseMove={handleThroughputMouseMove}>
+              <LineChart data={throughputData}>
                 <CartesianGrid stroke="#373F48" strokeDasharray="0" vertical={false} />
                 <XAxis
-                  dataKey="date"
+                  dataKey="datetime"
                   type="category"
                   allowDuplicatedCategory={false}
                   tick={{ fill: "#C7CACC", fontFamily: "Nunito", fontSize: 12 }}
                   axisLine={{ stroke: "#373F48" }}
                   tickLine={false}
+                  interval="preserveStartEnd"
+                  tickFormatter={throughputTickFormatterX}
                 />
                 <YAxis
                   tickFormatter={throughputTickFormatter}
@@ -187,8 +209,8 @@ export default function Performance() {
                   tickLine={false}
                 />
                 <Tooltip />
-                <Line type="monotone" dataKey="read" data={throughputData} stroke="#AA7EDD" strokeWidth={2} dot={false} name="Source 1" />
-                <Line type="monotone" dataKey="write" data={throughputData} stroke="#00A3CA" strokeWidth={2} dot={false} name="Source 2" />
+                <Line type="monotone" dataKey="read" stroke="#AA7EDD" strokeWidth={2} dot={false} name="Read" />
+                <Line type="monotone" dataKey="write" stroke="#00A3CA" strokeWidth={2} dot={false} name="Write" />
               </LineChart>
             </ResponsiveContainer>
           </div>
