@@ -10,8 +10,9 @@ import {
   Tooltip,
   CartesianGrid,
 } from "recharts";
+import { read, write } from "fs";
 
-const data1 = [
+const IOPSData = [
   { date: "Jul 01", read: 20000, write: 10000 },
   { date: "Jul 02", read: 40000, write: 40000 },
   { date: "Jul 03", read: 60000, write: 30000 },
@@ -19,20 +20,12 @@ const data1 = [
   { date: "Jul 05", read: 100000, write: 50000 },
 ];
 // New data for second graph (Throughput in GB/s)
-const throughputData1 = [
-  { date: "Jul 01", value: 0.5 },
-  { date: "Jul 02", value: 1.0 },
-  { date: "Jul 03", value: 1.5 },
-  { date: "Jul 04", value: 2.0 },
-  { date: "Jul 05", value: 2.0 },
-];
-
-const throughputData2 = [
-  { date: "Jul 01", value: 0.2 },
-  { date: "Jul 02", value: 0.8 },
-  { date: "Jul 03", value: 1.2 },
-  { date: "Jul 04", value: 1.7 },
-  { date: "Jul 05", value: 1.9 },
+const throughputData = [
+  { date: "Jul 01", read: 0.5, write: 0.2 },
+  { date: "Jul 02", read: 1.0, write: 0.8 },
+  { date: "Jul 03", read: 1.5, write: 1.2 },
+  { date: "Jul 04", read: 2.0, write: 1.7 },
+  { date: "Jul 05", read: 2.0, write: 1.9 },
 ];
 
 function yTickFormatter(value: number) {
@@ -100,7 +93,7 @@ export default function Performance() {
           {/* Graph plot section (bottom 75%) */}
           <div className="h-[75%] w-full flex items-center justify-center" style={{ background: "#1B222C" }}>
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={data1} onMouseMove={handleIOPSMouseMove}>
+              <LineChart data={IOPSData} onMouseMove={handleIOPSMouseMove}>
                 <CartesianGrid stroke="#373F48" strokeDasharray="0" vertical={false} />
                 <XAxis
                   dataKey="date"
@@ -119,8 +112,8 @@ export default function Performance() {
                   tickLine={false}
                 />
                 <Tooltip />
-                <Line type="monotone" dataKey="read" data={data1} stroke="#AA7EDD" strokeWidth={2} dot={false} name="Source 1" />
-                <Line type="monotone" dataKey="write" data={data1} stroke="#00A3CA" strokeWidth={2} dot={false} name="Source 2" />
+                <Line type="monotone" dataKey="read" data={IOPSData} stroke="#AA7EDD" strokeWidth={2} dot={false} name="Source 1" />
+                <Line type="monotone" dataKey="write" data={IOPSData} stroke="#00A3CA" strokeWidth={2} dot={false} name="Source 2" />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -173,7 +166,7 @@ export default function Performance() {
           {/* Graph plot section (bottom 75%) */}
           <div className="h-[75%] w-full flex items-center justify-center" style={{ background: "#1B222C" }}>
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={throughputData1} onMouseMove={handleThroughputMouseMove}>
+              <LineChart data={throughputData} onMouseMove={handleThroughputMouseMove}>
                 <CartesianGrid stroke="#373F48" strokeDasharray="0" vertical={false} />
                 <XAxis
                   dataKey="date"
@@ -192,8 +185,8 @@ export default function Performance() {
                   tickLine={false}
                 />
                 <Tooltip />
-                <Line type="monotone" dataKey="value" data={throughputData1} stroke="#AA7EDD" strokeWidth={2} dot={false} name="Source 1" />
-                <Line type="monotone" dataKey="value" data={throughputData2} stroke="#00A3CA" strokeWidth={2} dot={false} name="Source 2" />
+                <Line type="monotone" dataKey="read" data={throughputData} stroke="#AA7EDD" strokeWidth={2} dot={false} name="Source 1" />
+                <Line type="monotone" dataKey="write" data={throughputData} stroke="#00A3CA" strokeWidth={2} dot={false} name="Source 2" />
               </LineChart>
             </ResponsiveContainer>
           </div>
