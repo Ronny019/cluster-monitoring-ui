@@ -29,9 +29,9 @@ export default function NavbarHeader() {
 
   return (
     <div className="flex items-center">
-      <LogoNexus width={50} height={26} className="mr-2" />
+      <LogoNexus width={50} height={50} className="mr-1" /> {/* Changed from mr-2 to mr-1 */}
       <select
-        className="text-white font-semibold outline-none"
+        className="text-white outline-none font-nunito text-lg h-[50px] px-2"
         value={selectedCluster}
         onChange={e => setSelectedCluster(e.target.value)}
       >
@@ -39,8 +39,8 @@ export default function NavbarHeader() {
           <option
             key={cluster.cluster_id}
             value={cluster.cluster_id}
-            className="text-black"
-            style={{ backgroundColor: "#242C35", color: "#fff"}}
+            className="text-black font-nunito text-lg"
+            style={{ backgroundColor: "#242C35", color: "#fff" }}
           >
             {cluster.cluster_name}
           </option>
