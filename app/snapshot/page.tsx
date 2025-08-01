@@ -1,7 +1,10 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import { useCluster } from "../context/ClusterContext"; // adjust path as needed
 
 export default function Snapshot() {
+  const { selectedCluster } = useCluster();
+
   const [deleteOption, setDeleteOption] = useState<"never" | "auto">("never");
   const [lockedSnapshotsEnabled, setLockedSnapshotsEnabled] = useState(false);
 

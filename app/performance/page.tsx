@@ -11,6 +11,7 @@ import {
   CartesianGrid,
 } from "recharts";
 import { read, write } from "fs";
+import { useCluster } from "../context/ClusterContext"; // adjust path as needed
 
 const IOPSData = [
   { date: "Jul 01", read: 20000, write: 10000 },
@@ -37,6 +38,7 @@ function throughputTickFormatter(value: number) {
 }
 
 export default function Performance() {
+  const { selectedCluster } = useCluster();
   const [selected, setSelected] = useState("Last 7 days");
   const [ReadIOPS, setReadIOPS] = useState<number | null>(0);
   const [WriteIOPS, setWriteIOPS] = useState<number | null>(0);
