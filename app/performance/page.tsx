@@ -126,16 +126,37 @@ export default function Performance() {
           </div>
         </div>
         {/* Readings area */}
-        <div className="w-[10%] h-full bg-[#1B222B] rounded-none flex flex-col items-center text-white font-nunito">
-          <div className="flex flex-col w-full" style={{ height: "82%" }}>
-            <div className="w-full flex items-end justify-start border-b" style={{ borderColor: "#333B4480", height: "34%" }}>
+        <div className="w-[10%] h-full bg-[#1B222B] rounded-none flex flex-col items-start text-white font-nunito justify-center">
+          <div className="flex flex-col w-full h-full justify-center">
+            <div
+              className="w-full flex items-end justify-start border-b"
+              style={{ borderColor: "#333B4480", height: "34%" }}
+            >
               <span className="font-nunito pb-2 pl-2 text-[#858B90]">IOPS</span>
             </div>
-            <div className="w-full flex items-center justify-center border-b" style={{ borderColor: "#333B4480", borderRight: "1px solid #333B4480", background: "#222C36CC", height: "33%" }}>
-              <span style={{ color: "#AA7EDD" }}>Read</span>
+            <div
+              className="w-full flex items-center justify-start border-b border-l"
+              style={{
+                borderColor: "#333B4480",
+                borderLeft: "1px solid #333B4480",
+                borderRight: "1px solid #333B4480",
+                background: "#222C36CC",
+                height: "33%",
+              }}
+            >
+              <span style={{ color: "#AA7EDD", marginLeft: 8 }}>Read</span>
             </div>
-            <div className="w-full flex items-center justify-center border-b" style={{ borderColor: "#333B4480", borderRight: "1px solid #333B4480", background: "#222C36CC", height: "33%" }}>
-              <span style={{ color: "#00A3CA" }}>Write</span>
+            <div
+              className="w-full flex items-center justify-start border-b border-l"
+              style={{
+                borderColor: "#333B4480",
+                borderLeft: "1px solid #333B4480",
+                borderRight: "1px solid #333B4480",
+                background: "#222C36CC",
+                height: "33%",
+              }}
+            >
+              <span style={{ color: "#00A3CA", marginLeft: 8 }}>Write</span>
             </div>
           </div>
           <div className="w-full" style={{ height: "18%" }}></div>
@@ -178,16 +199,37 @@ export default function Performance() {
           </div>
         </div>
         {/* Second readings area */}
-        <div className="w-[10%] h-full bg-[#1B222B] rounded-none flex flex-col items-center text-white font-nunito">
-          <div className="flex flex-col w-full" style={{ height: "82%" }}>
-            <div className="w-full flex items-end justify-start border-b" style={{ borderColor: "#333B4480", height: "34%" }}>
+        <div className="w-[10%] h-full bg-[#1B222B] rounded-none flex flex-col items-start text-white font-nunito justify-center">
+          <div className="flex flex-col w-full h-full justify-center">
+            <div
+              className="w-full flex items-end justify-start border-b"
+              style={{ borderColor: "#333B4480", height: "34%" }}
+            >
               <span className="font-nunito pb-2 pl-2 text-[#858B90]">Throughput</span>
             </div>
-            <div className="w-full flex items-center justify-center border-b" style={{ borderColor: "#333B4480", borderRight: "1px solid #333B4480", background: "#222C36CC", height: "33%" }}>
-              <span style={{ color: "#AA7EDD" }}>Read</span>
+            <div
+              className="w-full flex items-center justify-start border-b border-l"
+              style={{
+                borderColor: "#333B4480",
+                borderLeft: "1px solid #333B4480",
+                borderRight: "1px solid #333B4480",
+                background: "#222C36CC",
+                height: "33%",
+              }}
+            >
+              <span style={{ color: "#AA7EDD", marginLeft: 8 }}>Read</span>
             </div>
-            <div className="w-full flex items-center justify-center border-b" style={{ borderColor: "#333B4480", borderRight: "1px solid #333B4480", background: "#222C36CC", height: "33%" }}>
-              <span style={{ color: "#00A3CA" }}>Write</span>
+            <div
+              className="w-full flex items-center justify-start border-b border-l"
+              style={{
+                borderColor: "#333B4480",
+                borderLeft: "1px solid #333B4480",
+                borderRight: "1px solid #333B4480",
+                background: "#222C36CC",
+                height: "33%",
+              }}
+            >
+              <span style={{ color: "#00A3CA", marginLeft: 8 }}>Write</span>
             </div>
           </div>
           <div className="w-full" style={{ height: "18%" }}></div>

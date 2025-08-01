@@ -251,7 +251,9 @@ export default function Snapshot() {
                 type="number"
                 min="1"
                 defaultValue="14"
-                className="w-14 bg-[#424B5380] border border-[#424B53] rounded-md px-2 py-1 mx-2 text-[#C7CACC] font-nunito text-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none appearance-none"
+                className={`w-14 bg-[#424B5380] border border-[#424B53] rounded-md px-2 py-1 mx-2 font-nunito text-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none appearance-none ${
+                  deleteOption === "never" ? "text-[#777777]" : "text-[#C7CACC]"
+                }`}
                 style={{ MozAppearance: 'textfield' }}
                 disabled={deleteOption !== "auto"}
               />
