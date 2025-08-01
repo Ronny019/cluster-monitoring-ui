@@ -1,12 +1,19 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useCluster } from "../context/ClusterContext"; // adjust path as needed
+import axios from "axios";
 
 export default function Snapshot() {
   const { selectedCluster } = useCluster();
+  const [snapshotData, setSnapshotData] = useState<any>(null);
 
-  const [deleteOption, setDeleteOption] = useState<"never" | "auto">("never");
-  const [lockedSnapshotsEnabled, setLockedSnapshotsEnabled] = useState(false);
+  // State variables for each form component
+  const [policyName, setPolicyName] = useState("");
+  const [applyDirectory, setApplyDirectory] = useState("");
+  const [scheduleType, setScheduleType] = useState("Daily or Weekly");
+  const [timeZone, setTimeZone] = useState("America/Los Angeles");
+  const [snapshotHour, setSnapshotHour] = useState("07");
+  const [snapshotMinute, setSnapshotMinute] = useState("00");
 
   // Checkbox state for "On the Following Day(s)"
   const [everyDayChecked, setEveryDayChecked] = useState(false);
@@ -17,6 +24,53 @@ export default function Snapshot() {
   const [friChecked, setFriChecked] = useState(false);
   const [satChecked, setSatChecked] = useState(false);
   const [sunChecked, setSunChecked] = useState(false);
+
+  // Delete option and related state
+  const [deleteOption, setDeleteOption] = useState<"never" | "auto">("never");
+  const [deleteAfter, setDeleteAfter] = useState("14");
+  const [deleteAfterUnit, setDeleteAfterUnit] = useState("day(s)");
+
+  // Snapshot locking and policy enable
+  const [lockedSnapshotsEnabled, setLockedSnapshotsEnabled] = useState(false);
+  const [enablePolicy, setEnablePolicy] = useState(true);
+
+  useEffect(() => {
+    if (!selectedCluster) return;
+    axios
+      .get(`http://127.0.0.1:3333/data/snapshot?cluster_id=${selectedCluster}`)
+      .then(res => {
+        const data = res.data[0];
+        setSnapshotData(data);
+
+        // Set state variables from fetched data (with fallback/defaults)
+        setPolicyName(data?.policyName || "");
+        setApplyDirectory(data?.applyDirectory || "");
+        setScheduleType(data?.scheduleType || "Daily or Weekly");
+        setTimeZone(data?.timeZone || "America/Los Angeles");
+        setSnapshotHour(data?.snapshotHour || "07");
+        setSnapshotMinute(data?.snapshotMinute || "00");
+
+        setEveryDayChecked(data?.days?.everyDay || false);
+        setMonChecked(data?.days?.mon ?? false);
+        setTueChecked(data?.days?.tue ?? false);
+        setWedChecked(data?.days?.wed ?? false);
+        setThurChecked(data?.days?.thur ?? false);
+        setFriChecked(data?.days?.fri ?? false);
+        setSatChecked(data?.days?.sat ?? false);
+        setSunChecked(data?.days?.sun ?? false);
+
+        setDeleteOption(data?.deleteOption || "never");
+        setDeleteAfter(data?.deleteAfter || "14");
+        setDeleteAfterUnit(data?.deleteAfterUnit || "day(s)");
+
+        setLockedSnapshotsEnabled(data?.lockedSnapshotsEnabled || false);
+        setEnablePolicy(data?.enablePolicy ?? true);
+      })
+      .catch(err => {
+        setSnapshotData(null);
+        console.error("Error fetching snapshot data:", err);
+      });
+  }, [selectedCluster]);
 
   const isLockedSnapshotsDisabled = deleteOption === "never";
 
@@ -49,9 +103,70 @@ export default function Snapshot() {
   };
 
   // --- Begin form structure ---
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // handle form submission logic here
+
+    // Build the JSON body from current state
+    const body = {
+      cluster_id: selectedCluster,
+      cluster_name: snapshotData?.cluster_name || "",
+      policyName,
+      applyDirectory,
+      scheduleType,
+      timeZone,
+      snapshotHour,
+      snapshotMinute,
+      days: {
+        everyDay: everyDayChecked,
+        mon: monChecked,
+        tue: tueChecked,
+        wed: wedChecked,
+        thur: thurChecked,
+        fri: friChecked,
+        sat: satChecked,
+        sun: sunChecked,
+      },
+      deleteOption,
+      deleteAfter,
+      deleteAfterUnit,
+      lockedSnapshotsEnabled,
+      enablePolicy,
+    };
+
+    try {
+      await axios.put("http://127.0.0.1:3333/data/snapshot", body);
+      // Optionally, show a success message or refetch data
+      // alert("Snapshot policy saved!");
+    } catch (err) {
+      console.error("Error saving snapshot policy:", err);
+      // Optionally, show an error message
+    }
+  };
+
+  // Add this helper function inside your component:
+  const resetFormToSnapshot = (data: any) => {
+    setPolicyName(data?.policyName || "");
+    setApplyDirectory(data?.applyDirectory || "");
+    setScheduleType(data?.scheduleType || "Daily or Weekly");
+    setTimeZone(data?.timeZone || "America/Los Angeles");
+    setSnapshotHour(data?.snapshotHour || "07");
+    setSnapshotMinute(data?.snapshotMinute || "00");
+
+    setEveryDayChecked(data?.days?.everyDay || false);
+    setMonChecked(data?.days?.mon ?? false);
+    setTueChecked(data?.days?.tue ?? false);
+    setWedChecked(data?.days?.wed ?? false);
+    setThurChecked(data?.days?.thur ?? false);
+    setFriChecked(data?.days?.fri ?? false);
+    setSatChecked(data?.days?.sat ?? false);
+    setSunChecked(data?.days?.sun ?? false);
+
+    setDeleteOption(data?.deleteOption || "never");
+    setDeleteAfter(data?.deleteAfter || "14");
+    setDeleteAfterUnit(data?.deleteAfterUnit || "day(s)");
+
+    setLockedSnapshotsEnabled(data?.lockedSnapshotsEnabled || false);
+    setEnablePolicy(data?.enablePolicy ?? true);
   };
 
   return (
@@ -75,6 +190,8 @@ export default function Snapshot() {
             type="text"
             placeholder="ProjectX_Daily"
             className="font-nunito text-[#C7CACC] bg-[#424B5380] border border-[#424B53] rounded-md px-4 py-2 placeholder-[#C7CACC] outline-none w-full"
+            value={policyName}
+            onChange={e => setPolicyName(e.target.value)}
           />
         </div>
         {/* Apply to Directory Input */}
@@ -95,6 +212,8 @@ export default function Snapshot() {
               placeholder="Production/ProjectX"
               className="flex-1 font-nunito text-[#C7CACC] bg-[#424B5380] border border-l-0 border-[#424B53] rounded-r-md px-4 py-2 placeholder-[#C7CACC] outline-none"
               style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
+              value={applyDirectory}
+              onChange={e => setApplyDirectory(e.target.value)}
             />
           </div>
         </div>
@@ -111,10 +230,11 @@ export default function Snapshot() {
             <select
               id="scheduleType"
               className="bg-[#424B5380] border border-[#424B53] rounded-md px-3 py-2 text-[#C7CACC] font-nunito"
-              defaultValue="Daily or Weekly"
+              value={scheduleType}
+              onChange={e => setScheduleType(e.target.value)}
             >
               <option>Daily or Weekly</option>
-              <option>Monthly</option>
+              {/* <option>Monthly</option> */}
             </select>
           </div>
           {/* Set to Time Zone */}
@@ -122,7 +242,7 @@ export default function Snapshot() {
             <label className="font-nunito text-[#C7CACC] text-[15px] mr-4 mb-2 md:mb-0">
               Set to Time Zone
             </label>
-            <span className="font-nunito text-[#C7CACC] bg-transparent px-3 py-2">America/Los Angeles</span>
+            <span className="font-nunito text-[#C7CACC] bg-transparent px-3 py-2">{timeZone}</span>
             <span
               className="ml-2 flex items-center justify-center w-6 h-6 rounded-full bg-[#0298FF] text-black font-bold text-[15px] cursor-pointer"
               title="Time zone info"
@@ -142,7 +262,7 @@ export default function Snapshot() {
               min="0"
               max="23"
               maxLength={2}
-              defaultValue="07"
+              value={snapshotHour}
               placeholder="07"
               className="w-14 bg-[#424B5380] border border-[#424B53] rounded-md px-2 py-2 text-[#C7CACC] font-nunito text-center mr-2 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none appearance-none"
               style={{ MozAppearance: 'textfield' }}
@@ -156,6 +276,7 @@ export default function Snapshot() {
                 // Pad with 0 if needed
                 if (v.length === 1 && parseInt(v, 10) > 2) v = "0" + v;
                 input.value = v;
+                setSnapshotHour(v);
               }}
             />
             <span className="text-[#C7CACC] font-nunito mr-2">:</span>
@@ -166,7 +287,7 @@ export default function Snapshot() {
               min="0"
               max="59"
               maxLength={2}
-              defaultValue="00"
+              value={snapshotMinute}
               placeholder="00"
               className="w-14 bg-[#424B5380] border border-[#424B53] rounded-md px-2 py-2 text-[#C7CACC] font-nunito text-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none appearance-none"
               style={{ MozAppearance: 'textfield' }}
@@ -181,6 +302,7 @@ export default function Snapshot() {
                 // Pad with 0 if needed
                 if (v.length === 1 && parseInt(v, 10) > 5) v = "0" + v;
                 input.value = v;
+                setSnapshotMinute(v);
               }}
             />
           </div>
@@ -342,7 +464,7 @@ export default function Snapshot() {
                   inputMode="numeric"
                   pattern="[0-9]*"
                   min="1"
-                  defaultValue="14"
+                  value={deleteAfter}
                   className={`w-14 bg-[#424B5380] border border-[#424B53] rounded-md px-2 py-1 mx-2 font-nunito text-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none appearance-none ${
                     deleteOption === "never" ? "text-[#777777]" : "text-[#C7CACC]"
                   }`}
@@ -350,11 +472,14 @@ export default function Snapshot() {
                   disabled={deleteOption !== "auto"}
                   onInput={e => {
                     (e.target as HTMLInputElement).value = (e.target as HTMLInputElement).value.replace(/[^0-9]/g, '');
+                    setDeleteAfter((e.target as HTMLInputElement).value);
                   }}
                 />
                 <select
                   className="bg-[#424B5380] border border-[#424B53] rounded-md px-2 py-1 text-[#C7CACC] font-nunito"
                   disabled={deleteOption !== "auto"}
+                  value={deleteAfterUnit}
+                  onChange={e => setDeleteAfterUnit(e.target.value)}
                 >
                   <option>day(s)</option>
                   <option>week(s)</option>
@@ -392,12 +517,13 @@ export default function Snapshot() {
               <input
                 type="checkbox"
                 className="accent-[#007ACC] checked:bg-[#007ACC] checked:text-white mr-2"
-                defaultChecked
                 style={{
                   accentColor: '#007ACC',
                   backgroundColor: '#007ACC',
                   color: '#fff'
                 }}
+                checked={enablePolicy}
+                onChange={e => setEnablePolicy(e.target.checked)}
               />
               Enable policy
             </label>
@@ -412,6 +538,9 @@ export default function Snapshot() {
             <button
               className="text-[#0298FF] hover:underline font-nunito text-[15px] font-normal px-2 py-2 rounded-md"
               type="button"
+              onClick={() => {
+                if (snapshotData) resetFormToSnapshot(snapshotData);
+              }}
             >
               Cancel
             </button>
