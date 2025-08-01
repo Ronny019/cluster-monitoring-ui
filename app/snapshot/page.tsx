@@ -5,6 +5,16 @@ export default function Snapshot() {
   const [deleteOption, setDeleteOption] = useState<"never" | "auto">("never");
   const [lockedSnapshotsEnabled, setLockedSnapshotsEnabled] = useState(false);
 
+  // Checkbox state for "On the Following Day(s)"
+  const [everyDayChecked, setEveryDayChecked] = useState(false);
+  const [monChecked, setMonChecked] = useState(true);
+  const [tueChecked, setTueChecked] = useState(true);
+  const [wedChecked, setWedChecked] = useState(true);
+  const [thurChecked, setThurChecked] = useState(true);
+  const [friChecked, setFriChecked] = useState(false);
+  const [satChecked, setSatChecked] = useState(false);
+  const [sunChecked, setSunChecked] = useState(false);
+
   const isLockedSnapshotsDisabled = deleteOption === "never";
 
   // Uncheck Enable locked snapshots when Delete Each Snapshot is set to never
@@ -13,6 +23,27 @@ export default function Snapshot() {
       setLockedSnapshotsEnabled(false);
     }
   }, [deleteOption, lockedSnapshotsEnabled]);
+
+  // Sync "Every day" with all days
+  useEffect(() => {
+    if (monChecked && tueChecked && wedChecked && thurChecked && friChecked && satChecked && sunChecked) {
+      setEveryDayChecked(true);
+    } else {
+      setEveryDayChecked(false);
+    }
+  }, [monChecked, tueChecked, wedChecked, thurChecked, friChecked, satChecked, sunChecked]);
+
+  // When "Every day" is checked, check all days
+  const handleEveryDayChange = (checked: boolean) => {
+    setEveryDayChecked(checked);
+    setMonChecked(checked);
+    setTueChecked(checked);
+    setWedChecked(checked);
+    setThurChecked(checked);
+    setFriChecked(checked);
+    setSatChecked(checked);
+    setSunChecked(checked);
+  };
 
   // --- Begin form structure ---
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -160,6 +191,9 @@ export default function Snapshot() {
                 <input
                   type="checkbox"
                   className="accent-[#007ACC] checked:bg-[#007ACC] checked:text-white mr-1"
+                  checked={everyDayChecked}
+                  onChange={e => handleEveryDayChange(e.target.checked)}
+                  value="everyday"
                   style={{
                     accentColor: '#007ACC',
                     backgroundColor: '#007ACC',
@@ -172,7 +206,9 @@ export default function Snapshot() {
                 <input
                   type="checkbox"
                   className="accent-[#007ACC] checked:bg-[#007ACC] checked:text-white mr-1"
-                  defaultChecked
+                  checked={monChecked}
+                  onChange={e => setMonChecked(e.target.checked)}
+                  value="mon"
                   style={{
                     accentColor: '#007ACC',
                     backgroundColor: '#007ACC',
@@ -185,7 +221,9 @@ export default function Snapshot() {
                 <input
                   type="checkbox"
                   className="accent-[#007ACC] checked:bg-[#007ACC] checked:text-white mr-1"
-                  defaultChecked
+                  checked={tueChecked}
+                  onChange={e => setTueChecked(e.target.checked)}
+                  value="tue"
                   style={{
                     accentColor: '#007ACC',
                     backgroundColor: '#007ACC',
@@ -198,7 +236,9 @@ export default function Snapshot() {
                 <input
                   type="checkbox"
                   className="accent-[#007ACC] checked:bg-[#007ACC] checked:text-white mr-1"
-                  defaultChecked
+                  checked={wedChecked}
+                  onChange={e => setWedChecked(e.target.checked)}
+                  value="wed"
                   style={{
                     accentColor: '#007ACC',
                     backgroundColor: '#007ACC',
@@ -211,7 +251,9 @@ export default function Snapshot() {
                 <input
                   type="checkbox"
                   className="accent-[#007ACC] checked:bg-[#007ACC] checked:text-white mr-1"
-                  defaultChecked
+                  checked={thurChecked}
+                  onChange={e => setThurChecked(e.target.checked)}
+                  value="thur"
                   style={{
                     accentColor: '#007ACC',
                     backgroundColor: '#007ACC',
@@ -224,6 +266,9 @@ export default function Snapshot() {
                 <input
                   type="checkbox"
                   className="accent-[#007ACC] checked:bg-[#007ACC] checked:text-white mr-1"
+                  checked={friChecked}
+                  onChange={e => setFriChecked(e.target.checked)}
+                  value="fri"
                   style={{
                     accentColor: '#007ACC',
                     backgroundColor: '#007ACC',
@@ -236,6 +281,9 @@ export default function Snapshot() {
                 <input
                   type="checkbox"
                   className="accent-[#007ACC] checked:bg-[#007ACC] checked:text-white mr-1"
+                  checked={satChecked}
+                  onChange={e => setSatChecked(e.target.checked)}
+                  value="sat"
                   style={{
                     accentColor: '#007ACC',
                     backgroundColor: '#007ACC',
@@ -248,6 +296,9 @@ export default function Snapshot() {
                 <input
                   type="checkbox"
                   className="accent-[#007ACC] checked:bg-[#007ACC] checked:text-white mr-1"
+                  checked={sunChecked}
+                  onChange={e => setSunChecked(e.target.checked)}
+                  value="sun"
                   style={{
                     accentColor: '#007ACC',
                     backgroundColor: '#007ACC',
