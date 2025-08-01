@@ -95,7 +95,6 @@ export default function Performance() {
             className="bg-[#222C36] border border-[#373F48] min-w-[140px] h-[24px] pl-2 pr-8 rounded-none font-nunito font-normal text-[14px] text-white text-center appearance-none flex items-center justify-center"
           >
             <option className="text-center">Last 7 days</option>
-            <option className="text-center">Last 24 hours</option>
           </select>
           <span className="absolute right-2 pointer-events-none flex items-center h-full">
             <ChevronDownIcon className="h-5 w-5 text-gray-400" />
