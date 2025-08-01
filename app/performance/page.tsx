@@ -132,10 +132,10 @@ export default function Performance() {
               <span className="font-nunito pb-2 pl-2 text-[#858B90]">IOPS</span>
             </div>
             <div className="w-full flex items-center justify-center border-b" style={{ borderColor: "#333B4480", borderRight: "1px solid #333B4480", background: "#222C36CC", height: "33%" }}>
-              Read
+              <span style={{ color: "#AA7EDD" }}>Read</span>
             </div>
             <div className="w-full flex items-center justify-center border-b" style={{ borderColor: "#333B4480", borderRight: "1px solid #333B4480", background: "#222C36CC", height: "33%" }}>
-              Write
+              <span style={{ color: "#00A3CA" }}>Write</span>
             </div>
           </div>
           <div className="w-full" style={{ height: "18%" }}></div>
@@ -184,10 +184,10 @@ export default function Performance() {
               <span className="font-nunito pb-2 pl-2 text-[#858B90]">Throughput</span>
             </div>
             <div className="w-full flex items-center justify-center border-b" style={{ borderColor: "#333B4480", borderRight: "1px solid #333B4480", background: "#222C36CC", height: "33%" }}>
-              Read
+              <span style={{ color: "#AA7EDD" }}>Read</span>
             </div>
             <div className="w-full flex items-center justify-center border-b" style={{ borderColor: "#333B4480", borderRight: "1px solid #333B4480", background: "#222C36CC", height: "33%" }}>
-              Write
+              <span style={{ color: "#00A3CA" }}>Write</span>
             </div>
           </div>
           <div className="w-full" style={{ height: "18%" }}></div>
