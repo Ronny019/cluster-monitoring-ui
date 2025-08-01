@@ -54,18 +54,18 @@ export default function Performance() {
   // Update IOPS values on hover
   const handleIOPSMouseMove = (state: any) => {
     // const datapoints = useActiveTooltipDataPoints();
-    if (state && state.activePayload && state.activePayload.length >= 2) {
-      setReadIOPS(state.activePayload[0].value);
-      setWriteIOPS(state.activePayload[1].value);
-    }
+    // if (state) {
+    //   setReadIOPS(state.activePayload[0].value);
+    //   setWriteIOPS(state.activePayload[1].value);
+    // }
   };
 
   // Update Throughput values on hover
   const handleThroughputMouseMove = (state: any) => {
-    if (state && state.activePayload && state.activePayload.length >= 2) {
-      setReadThroughput(state.activePayload[0].value);
-      setWriteThroughput(state.activePayload[1].value);
-    }
+    // if (state && state.activePayload && state.activePayload.length >= 2) {
+    //   setReadThroughput(state.activePayload[0].value);
+    //   setWriteThroughput(state.activePayload[1].value);
+    // }
   };
 
   return (
@@ -128,14 +128,14 @@ export default function Performance() {
         {/* Readings area */}
         <div className="w-[10%] h-full bg-[#1B222B] rounded-none flex flex-col items-center text-white font-nunito">
           <div className="flex flex-col w-full" style={{ height: "82%" }}>
-            <div className="w-full flex items-end justify-start border-b border-[#242C35] font-nunito pb-2 pl-2 text-[#858B90]" style={{ height: "34%" }}>
-              IOPS
+            <div className="w-full flex items-end justify-start border-b" style={{ borderColor: "#333B4480", height: "34%" }}>
+              <span className="font-nunito pb-2 pl-2 text-[#858B90]">IOPS</span>
             </div>
-            <div className="w-full flex items-center justify-center border-b border-[#242C35]" style={{ height: "33%" }}>
-              Read {ReadIOPS}
+            <div className="w-full flex items-center justify-center border-b" style={{ borderColor: "#333B4480", borderRight: "1px solid #333B4480", height: "33%" }}>
+              Read
             </div>
-            <div className="w-full flex items-center justify-center border-b border-[#242C35]" style={{ height: "33%" }}>
-              Write {WriteIOPS}
+            <div className="w-full flex items-center justify-center border-b" style={{ borderColor: "#333B4480", borderRight: "1px solid #333B4480", height: "33%" }}>
+              Write
             </div>
           </div>
           <div className="w-full" style={{ height: "18%" }}></div>
@@ -180,13 +180,13 @@ export default function Performance() {
         {/* Second readings area */}
         <div className="w-[10%] h-full bg-[#1B222B] rounded-none flex flex-col items-center text-white font-nunito">
           <div className="flex flex-col w-full" style={{ height: "82%" }}>
-            <div className="w-full flex items-end justify-start border-b border-[#242C35] font-nunito pb-2 pl-2 text-[#858B90]" style={{ height: "34%" }}>
-              Throughput
+            <div className="w-full flex items-end justify-start border-b" style={{ borderColor: "#333B4480", height: "34%" }}>
+              <span className="font-nunito pb-2 pl-2 text-[#858B90]">Throughput</span>
             </div>
-            <div className="w-full flex items-center justify-center border-b border-[#242C35]" style={{ height: "33%" }}>
+            <div className="w-full flex items-center justify-center border-b" style={{ borderColor: "#333B4480", borderRight: "1px solid #333B4480", height: "33%" }}>
               Read
             </div>
-            <div className="w-full flex items-center justify-center border-b border-[#242C35]" style={{ height: "33%" }}>
+            <div className="w-full flex items-center justify-center border-b" style={{ borderColor: "#333B4480", borderRight: "1px solid #333B4480", height: "33%" }}>
               Write
             </div>
           </div>
