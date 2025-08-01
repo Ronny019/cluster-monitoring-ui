@@ -94,11 +94,11 @@ export default function Performance() {
         {/* Graph area */}
         <div className="w-[90%] h-full flex flex-col">
           {/* Title section (top 25%) */}
-          <div className="h-[25%] w-full flex items-end justify-start border-b border-[#373F48] font-nunito font-normal text-[16px] pb-2 pl-4 text-[#C7CACC]">
+          <div className="h-[25%] w-full flex items-end justify-start font-nunito font-normal text-[16px] pb-2 pl-4 text-[#C7CACC]" style={{ background: "#1B222C" }}>
             IOPS
           </div>
           {/* Graph plot section (bottom 75%) */}
-          <div className="h-[75%] w-full flex items-center justify-center">
+          <div className="h-[75%] w-full flex items-center justify-center" style={{ background: "#1B222C" }}>
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={data1} onMouseMove={handleIOPSMouseMove}>
                 <CartesianGrid stroke="#373F48" strokeDasharray="0" vertical={false} />
@@ -131,10 +131,10 @@ export default function Performance() {
             <div className="w-full flex items-end justify-start border-b" style={{ borderColor: "#333B4480", height: "34%" }}>
               <span className="font-nunito pb-2 pl-2 text-[#858B90]">IOPS</span>
             </div>
-            <div className="w-full flex items-center justify-center border-b" style={{ borderColor: "#333B4480", borderRight: "1px solid #333B4480", height: "33%" }}>
+            <div className="w-full flex items-center justify-center border-b" style={{ borderColor: "#333B4480", borderRight: "1px solid #333B4480", background: "#222C36CC", height: "33%" }}>
               Read
             </div>
-            <div className="w-full flex items-center justify-center border-b" style={{ borderColor: "#333B4480", borderRight: "1px solid #333B4480", height: "33%" }}>
+            <div className="w-full flex items-center justify-center border-b" style={{ borderColor: "#333B4480", borderRight: "1px solid #333B4480", background: "#222C36CC", height: "33%" }}>
               Write
             </div>
           </div>
@@ -146,11 +146,11 @@ export default function Performance() {
         {/* Second graph area */}
         <div className="w-[90%] h-full flex flex-col">
           {/* Title section (top 25%) */}
-          <div className="h-[25%] w-full flex items-end justify-start border-b border-[#373F48] font-nunito font-normal text-[16px] pb-2 pl-4 text-[#C7CACC]">
+          <div className="h-[25%] w-full flex items-end justify-start font-nunito font-normal text-[16px] pb-2 pl-4 text-[#C7CACC]" style={{ background: "#1B222C" }}>
             Throughput
           </div>
           {/* Graph plot section (bottom 75%) */}
-          <div className="h-[75%] w-full flex items-center justify-center">
+          <div className="h-[75%] w-full flex items-center justify-center" style={{ background: "#1B222C" }}>
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={throughputData1} onMouseMove={handleThroughputMouseMove}>
                 <CartesianGrid stroke="#373F48" strokeDasharray="0" vertical={false} />
@@ -183,10 +183,10 @@ export default function Performance() {
             <div className="w-full flex items-end justify-start border-b" style={{ borderColor: "#333B4480", height: "34%" }}>
               <span className="font-nunito pb-2 pl-2 text-[#858B90]">Throughput</span>
             </div>
-            <div className="w-full flex items-center justify-center border-b" style={{ borderColor: "#333B4480", borderRight: "1px solid #333B4480", height: "33%" }}>
+            <div className="w-full flex items-center justify-center border-b" style={{ borderColor: "#333B4480", borderRight: "1px solid #333B4480", background: "#222C36CC", height: "33%" }}>
               Read
             </div>
-            <div className="w-full flex items-center justify-center border-b" style={{ borderColor: "#333B4480", borderRight: "1px solid #333B4480", height: "33%" }}>
+            <div className="w-full flex items-center justify-center border-b" style={{ borderColor: "#333B4480", borderRight: "1px solid #333B4480", background: "#222C36CC", height: "33%" }}>
               Write
             </div>
           </div>
