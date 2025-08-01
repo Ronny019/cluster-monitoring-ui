@@ -12,7 +12,7 @@ import {
 } from "recharts";
 import axios from "axios";
 import { useCluster } from "../context/ClusterContext"; // adjust path as needed
-import { format, parseISO } from "date-fns";
+import { format, parseISO, format as formatDate } from "date-fns";
 
 function yTickFormatter(value: number) {
   return `${value / 1000}k`;
@@ -44,6 +44,21 @@ function getSparseTickFormatter(data: any[]) {
     }
     return "";
   };
+}
+
+function filterLastNDays(data: any[], days: number) {
+  if (!data || data.length === 0) return [];
+  const now = new Date();
+  const cutoff = new Date(now);
+  cutoff.setDate(now.getDate() - (days - 1));
+  return data.filter((d) => {
+    try {
+      const dt = parseISO(d.datetime);
+      return dt >= cutoff && dt <= now;
+    } catch {
+      return false;
+    }
+  });
 }
 
 export default function Performance() {
@@ -78,8 +93,15 @@ export default function Performance() {
       });
   }, [selectedCluster]);
 
-  const iopsTickFormatter = useMemo(() => getSparseTickFormatter(IOPSData), [IOPSData]);
-  const throughputTickFormatterX = useMemo(() => getSparseTickFormatter(throughputData), [throughputData]);
+  // Only show last 7 days of data
+  const filteredIOPSData = useMemo(() => filterLastNDays(IOPSData, 7), [IOPSData]);
+  const filteredThroughputData = useMemo(() => filterLastNDays(throughputData, 7), [throughputData]);
+
+  const iopsTickFormatter = useMemo(() => getSparseTickFormatter(filteredIOPSData), [filteredIOPSData]);
+  const throughputTickFormatterX = useMemo(() => getSparseTickFormatter(filteredThroughputData), [filteredThroughputData]);
+
+  // Format: Dec. 5, 10:14am
+  const now = formatDate(new Date(), "MMM. d, h:mmaaa").replace("AM", "am").replace("PM", "pm");
 
   return (
     <div className="flex flex-col min-h-screen bg-[#1B222B] overflow-hidden">
@@ -106,13 +128,14 @@ export default function Performance() {
         {/* Graph area */}
         <div className="w-[90%] h-full flex flex-col">
           {/* Title section (top 25%) */}
-          <div className="h-[25%] w-full flex items-end justify-start font-nunito font-normal text-[16px] pb-2 pl-4 text-[#C7CACC]" style={{ background: "#1B222C" }}>
-            IOPS
+          <div className="h-[25%] w-full flex items-end justify-between font-nunito font-normal text-[16px] pb-2 pl-4 pr-4 text-[#C7CACC]" style={{ background: "#1B222C" }}>
+            <span>IOPS</span>
+            <span className="text-xs text-white opacity-70 self-end">{now}</span>
           </div>
           {/* Graph plot section (bottom 75%) */}
           <div className="h-[75%] w-full flex items-center justify-center" style={{ background: "#1B222C" }}>
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={IOPSData}>
+              <LineChart data={filteredIOPSData}>
                 <CartesianGrid stroke="#373F48" strokeDasharray="0" vertical={false} />
                 <XAxis
                   dataKey="datetime"
@@ -181,13 +204,14 @@ export default function Performance() {
         {/* Second graph area */}
         <div className="w-[90%] h-full flex flex-col">
           {/* Title section (top 25%) */}
-          <div className="h-[25%] w-full flex items-end justify-start font-nunito font-normal text-[16px] pb-2 pl-4 text-[#C7CACC]" style={{ background: "#1B222C" }}>
-            Throughput
+          <div className="h-[25%] w-full flex items-end justify-between font-nunito font-normal text-[16px] pb-2 pl-4 pr-4 text-[#C7CACC]" style={{ background: "#1B222C" }}>
+            <span>Throughput</span>
+            <span className="text-xs text-white opacity-70 self-end">{now}</span>
           </div>
           {/* Graph plot section (bottom 75%) */}
           <div className="h-[75%] w-full flex items-center justify-center" style={{ background: "#1B222C" }}>
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={throughputData}>
+              <LineChart data={filteredThroughputData}>
                 <CartesianGrid stroke="#373F48" strokeDasharray="0" vertical={false} />
                 <XAxis
                   dataKey="datetime"
