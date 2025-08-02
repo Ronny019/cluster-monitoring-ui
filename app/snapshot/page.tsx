@@ -224,7 +224,10 @@ export default function Snapshot() {
           </div>
           {/* Select Schedule Type */}
           <div className="flex flex-col md:flex-row md:items-center bg-[#242C35] rounded-t-md p-2">
-            <label className="font-nunito text-[#C7CACC] text-[15px] mr-4 mb-2 md:mb-0" htmlFor="scheduleType">
+            <label
+              className="font-nunito text-[#C7CACC] text-[15px] mb-2 md:mb-0 mr-4 md:w-56 w-full text-right"
+              htmlFor="scheduleType"
+            >
               Select Schedule Type
             </label>
             <select
@@ -239,7 +242,7 @@ export default function Snapshot() {
           </div>
           {/* Set to Time Zone */}
           <div className="flex flex-col md:flex-row md:items-center bg-[#242C35] p-2">
-            <label className="font-nunito text-[#C7CACC] text-[15px] mr-4 mb-2 md:mb-0">
+            <label className="font-nunito text-[#C7CACC] text-[15px] mb-2 md:mb-0 mr-4 md:w-56 w-full text-right">
               Set to Time Zone
             </label>
             <span className="font-nunito text-[#C7CACC] bg-transparent px-3 py-2">{timeZone}</span>
@@ -252,7 +255,7 @@ export default function Snapshot() {
           </div>
           {/* Take a Snapshot at */}
           <div className="flex flex-col md:flex-row md:items-center bg-[#242C35] p-2">
-            <label className="font-nunito text-[#C7CACC] text-[15px] mr-4 mb-2 md:mb-0">
+            <label className="font-nunito text-[#C7CACC] text-[15px] mb-2 md:mb-0 mr-4 md:w-56 w-full text-right">
               Take a Snapshot at
             </label>
             <input
@@ -271,9 +274,7 @@ export default function Snapshot() {
                 let v = input.value.replace(/[^0-9]/g, '');
                 if (v.length > 2) v = v.slice(0, 2);
                 if (v.length === 2 && (parseInt(v, 10) < 0 || parseInt(v, 10) > 23)) v = v.slice(0, 1);
-                // Prevent values > 23
                 if (v && parseInt(v, 10) > 23) v = "23";
-                // Pad with 0 if needed
                 if (v.length === 1 && parseInt(v, 10) > 2) v = "0" + v;
                 input.value = v;
                 setSnapshotHour(v);
@@ -292,14 +293,11 @@ export default function Snapshot() {
               className="w-14 bg-[#424B5380] border border-[#424B53] rounded-md px-2 py-2 text-[#C7CACC] font-nunito text-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none appearance-none"
               style={{ MozAppearance: 'textfield' }}
               onInput={e => {
-                // @ts-ignore
                 const input = e.target as HTMLInputElement;
                 let v = input.value.replace(/[^0-9]/g, '');
                 if (v.length > 2) v = v.slice(0, 2);
                 if (v.length === 2 && (parseInt(v, 10) < 0 || parseInt(v, 10) > 59)) v = v.slice(0, 1);
-                // Prevent values > 59
                 if (v && parseInt(v, 10) > 59) v = "59";
-                // Pad with 0 if needed
                 if (v.length === 1 && parseInt(v, 10) > 5) v = "0" + v;
                 input.value = v;
                 setSnapshotMinute(v);
@@ -308,7 +306,7 @@ export default function Snapshot() {
           </div>
           {/* On the Following Day(s) */}
           <div className="flex flex-col md:flex-row md:items-center bg-[#242C35] p-2">
-            <label className="font-nunito text-[#C7CACC] text-[15px] mr-4 mb-2 md:mb-0">
+            <label className="font-nunito text-[#C7CACC] text-[15px] mb-2 md:mb-0 mr-4 md:w-56 w-full text-right">
               On the Following Day(s)
             </label>
             <div className="flex flex-wrap gap-3">
@@ -436,7 +434,7 @@ export default function Snapshot() {
           </div>
           {/* Delete Each Snapshot */}
           <div className="flex flex-col md:flex-row md:items-center bg-[#242C35] rounded-b-md p-2">
-            <label className="font-nunito text-[#C7CACC] text-[15px] mr-4 mb-2 md:mb-0">
+            <label className="font-nunito text-[#C7CACC] text-[15px] mb-2 md:mb-0 mr-4 md:w-56 w-full text-right">
               Delete Each Snapshot
             </label>
             <div className="flex items-center gap-4">
