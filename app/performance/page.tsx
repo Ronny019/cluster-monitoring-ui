@@ -179,7 +179,7 @@ export default function Performance() {
                   ticks={[0, 50000, 100000]}
                   domain={[0, 100000]}
                   tick={{ fill: "#C7CACC", fontFamily: "Nunito", fontSize: 12 }}
-                  axisLine={{ stroke: "#373F48" }}
+                  axisLine={false} // <-- Remove the left border
                   tickLine={false}
                 />
                 {/* <Tooltip /> */}
@@ -263,7 +263,7 @@ export default function Performance() {
                   ticks={[0, 1, 2]}
                   domain={[0, 2]}
                   tick={{ fill: "#C7CACC", fontFamily: "Nunito", fontSize: 12 }}
-                  axisLine={{ stroke: "#373F48" }}
+                  axisLine={false} // <-- Remove the left border
                   tickLine={false}
                 />
                 {/* <Tooltip /> */}
