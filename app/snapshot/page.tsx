@@ -476,7 +476,9 @@ export default function Snapshot() {
                   }}
                 />
                 <select
-                  className="bg-[#424B5380] border border-[#424B53] rounded-md px-2 py-1 text-[#C7CACC] font-nunito"
+                  className={`bg-[#424B5380] border border-[#424B53] rounded-md px-2 py-1 font-nunito ${
+                    deleteOption !== "auto" ? "text-[#777777]" : "text-[#C7CACC]"
+                  }`}
                   disabled={deleteOption !== "auto"}
                   value={deleteAfterUnit}
                   onChange={e => setDeleteAfterUnit(e.target.value)}
