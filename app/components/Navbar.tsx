@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 import NavbarHeader from "./NavbarHeader";
 import Divider from "./Divider";
 import InfoIcon from "./InfoIcon";
@@ -11,8 +12,15 @@ const menuItems = [
 	{ name: "Edit Snapshot Policy", path: "/snapshot" },
 ];
 
+const users = [
+	"AD\\user",
+	"AD\\admin",
+	"AD\\guest"
+];
+
 export default function Navbar() {
 	const pathname = usePathname();
+	const [selectedUser, setSelectedUser] = useState(users[0]);
 
 	return (
 		<div className="min-h-screen h-full w-64 bg-[#242C35] text-white flex flex-col p-4 gap-2 sticky top-0">
@@ -58,9 +66,25 @@ export default function Navbar() {
 			<Divider />
 			<div className="flex items-center mt-2">
 				<InfoIcon className="h-5 w-5 text-gray-400" />
-				<span className="text-sm text-gray-300 ml-2">AD\user</span>
-				<div className="flex-1" />
-				<ChevronDownIcon className="h-7 w-7 text-gray-400" />
+				<div className="relative ml-2">
+					<select
+						value={selectedUser}
+						onChange={e => setSelectedUser(e.target.value)}
+						className="bg-[#242C35] text-sm text-gray-300 font-nunito pr-7 pl-2 py-1 rounded appearance-none outline-none"
+						style={{
+							WebkitAppearance: "none",
+							MozAppearance: "none",
+							appearance: "none"
+						}}
+					>
+						{users.map(user => (
+							<option key={user} value={user} className="bg-[#23272f] text-white">
+								{user}
+							</option>
+						))}
+					</select>
+					<ChevronDownIcon className="pointer-events-none absolute right-1 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+				</div>
 			</div>
 		</div>
 	);
