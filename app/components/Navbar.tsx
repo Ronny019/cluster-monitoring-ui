@@ -36,9 +36,14 @@ export default function Navbar() {
 										: "bg-[#242C35] hover:bg-gray-800"
 								}`}
 							>
-								{/* Bullet point always same color */}
-								<span className="mr-3 h-2 w-2 rounded-full bg-[#858B90]" />
-								<span>{item.name}</span>
+								{/* Bullet point smaller and matches text color */}
+								<span
+									className={`mr-2 h-1.5 w-1.5 rounded-full`}
+									style={{
+										background: isActive ? "#C7CACC" : "#C7CACC",
+									}}
+								/>
+								<span className="text-[#C7CACC]">{item.name}</span>
 							</Link>
 							{isActive && (
 								<span
