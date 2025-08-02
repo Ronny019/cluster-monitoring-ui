@@ -61,6 +61,15 @@ function filterLastNDays(data: any[], days: number) {
   });
 }
 
+// Helper function to format IOPS values
+function formatIOPS(value: number | undefined) {
+  if (typeof value !== "number") return "";
+  if (value >= 10000) {
+    return `${(value / 1000).toFixed(1)}k`;
+  }
+  return value.toString();
+}
+
 export default function Performance() {
   const { selectedCluster } = useCluster();
   const [selected, setSelected] = useState("Last 7 days");
@@ -210,7 +219,7 @@ export default function Performance() {
             >
               <span className="text-xs text-left pl-2 pt-1 pb-0" style={{ color: "#A6AAAE" }}>Read</span>
               <span style={{ color: "#AA7EDD", marginLeft: 8 }}>
-                {latestIOPS?.read}
+                {formatIOPS(latestIOPS?.read)}
                 <span style={{ fontSize: "0.8em", marginLeft: 2 }}>IOPS</span>
               </span>
             </div>
@@ -226,7 +235,7 @@ export default function Performance() {
             >
               <span className="text-xs text-left pl-2 pt-1 pb-0" style={{ color: "#A6AAAE" }}>Write</span>
               <span style={{ color: "#00A3CA", marginLeft: 8 }}>
-                {latestIOPS?.write}
+                {formatIOPS(latestIOPS?.write)}
                 <span style={{ fontSize: "0.8em", marginLeft: 2 }}>IOPS</span>
               </span>
             </div>
