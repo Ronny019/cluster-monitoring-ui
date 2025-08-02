@@ -442,7 +442,7 @@ export default function Snapshot() {
                 <input
                   type="radio"
                   name="deleteSnapshot"
-                  className="accent-[#4FC3F7] mr-1"
+                  className="custom-radio"
                   checked={deleteOption === "never"}
                   onChange={() => setDeleteOption("never")}
                 />
@@ -452,7 +452,7 @@ export default function Snapshot() {
                 <input
                   type="radio"
                   name="deleteSnapshot"
-                  className="accent-[#4FC3F7] mr-1"
+                  className="custom-radio"
                   checked={deleteOption === "auto"}
                   onChange={() => setDeleteOption("auto")}
                 />
