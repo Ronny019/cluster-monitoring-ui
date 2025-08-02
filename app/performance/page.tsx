@@ -67,6 +67,10 @@ export default function Performance() {
   const [IOPSData, setIOPSData] = useState<any[]>([]);
   const [throughputData, setThroughputData] = useState<any[]>([]);
 
+  // State for latest values
+  const [latestIOPS, setLatestIOPS] = useState<{ read: number; write: number } | null>(null);
+  const [latestThroughput, setLatestThroughput] = useState<{ read: number; write: number } | null>(null);
+
   // Fetch IOPS and Throughput data when selectedCluster changes
   useEffect(() => {
     if (!selectedCluster) return;
@@ -102,6 +106,29 @@ export default function Performance() {
 
   // Format: Dec. 5, 10:14am
   const now = formatDate(new Date(), "MMM. d, h:mmaaa").replace("AM", "am").replace("PM", "pm");
+
+  // Find the data point with the latest datetime
+  useEffect(() => {
+    if (filteredIOPSData.length > 0) {
+      const latest = filteredIOPSData.reduce((a, b) =>
+        parseISO(a.datetime) > parseISO(b.datetime) ? a : b
+      );
+      setLatestIOPS({ read: latest.read, write: latest.write });
+    } else {
+      setLatestIOPS(null);
+    }
+  }, [filteredIOPSData]);
+
+  useEffect(() => {
+    if (filteredThroughputData.length > 0) {
+      const latest = filteredThroughputData.reduce((a, b) =>
+        parseISO(a.datetime) > parseISO(b.datetime) ? a : b
+      );
+      setLatestThroughput({ read: latest.read, write: latest.write });
+    } else {
+      setLatestThroughput(null);
+    }
+  }, [filteredThroughputData]);
 
   return (
     <div className="flex flex-col min-h-screen bg-[#1B222B] overflow-hidden">
@@ -155,7 +182,7 @@ export default function Performance() {
                   axisLine={{ stroke: "#373F48" }}
                   tickLine={false}
                 />
-                <Tooltip />
+                {/* <Tooltip /> */}
                 <Line type="monotone" dataKey="read" stroke="#AA7EDD" strokeWidth={2} dot={false} name="Read" />
                 <Line type="monotone" dataKey="write" stroke="#00A3CA" strokeWidth={2} dot={false} name="Write" />
               </LineChart>
@@ -172,7 +199,7 @@ export default function Performance() {
               <span className="font-nunito pb-2 pl-2 text-[#858B90]">IOPS</span>
             </div>
             <div
-              className="w-full flex items-center justify-start border-b border-l"
+              className="w-full flex flex-col items-start justify-center border-b border-l"
               style={{
                 borderColor: "#333B4480",
                 borderLeft: "1px solid #333B4480",
@@ -181,10 +208,14 @@ export default function Performance() {
                 height: "33%",
               }}
             >
-              <span style={{ color: "#AA7EDD", marginLeft: 8 }}>Read</span>
+              <span className="text-xs text-left pl-2 pt-1 pb-0" style={{ color: "#A6AAAE" }}>Read</span>
+              <span style={{ color: "#AA7EDD", marginLeft: 8 }}>
+                {latestIOPS?.read}
+                <span style={{ fontSize: "0.8em", marginLeft: 2 }}>IOPS</span>
+              </span>
             </div>
             <div
-              className="w-full flex items-center justify-start border-b border-l"
+              className="w-full flex flex-col items-start justify-center border-b border-l"
               style={{
                 borderColor: "#333B4480",
                 borderLeft: "1px solid #333B4480",
@@ -193,7 +224,11 @@ export default function Performance() {
                 height: "33%",
               }}
             >
-              <span style={{ color: "#00A3CA", marginLeft: 8 }}>Write</span>
+              <span className="text-xs text-left pl-2 pt-1 pb-0" style={{ color: "#A6AAAE" }}>Write</span>
+              <span style={{ color: "#00A3CA", marginLeft: 8 }}>
+                {latestIOPS?.write}
+                <span style={{ fontSize: "0.8em", marginLeft: 2 }}>IOPS</span>
+              </span>
             </div>
           </div>
           <div className="w-full" style={{ height: "18%" }}></div>
@@ -231,7 +266,7 @@ export default function Performance() {
                   axisLine={{ stroke: "#373F48" }}
                   tickLine={false}
                 />
-                <Tooltip />
+                {/* <Tooltip /> */}
                 <Line type="monotone" dataKey="read" stroke="#AA7EDD" strokeWidth={2} dot={false} name="Read" />
                 <Line type="monotone" dataKey="write" stroke="#00A3CA" strokeWidth={2} dot={false} name="Write" />
               </LineChart>
@@ -248,7 +283,7 @@ export default function Performance() {
               <span className="font-nunito pb-2 pl-2 text-[#858B90]">Throughput</span>
             </div>
             <div
-              className="w-full flex items-center justify-start border-b border-l"
+              className="w-full flex flex-col items-start justify-center border-b border-l"
               style={{
                 borderColor: "#333B4480",
                 borderLeft: "1px solid #333B4480",
@@ -257,10 +292,14 @@ export default function Performance() {
                 height: "33%",
               }}
             >
-              <span style={{ color: "#AA7EDD", marginLeft: 8 }}>Read</span>
+              <span className="text-xs text-left pl-2 pt-1 pb-0" style={{ color: "#A6AAAE" }}>Read</span>
+              <span style={{ color: "#AA7EDD", marginLeft: 8 }}>
+                {latestThroughput?.read}
+                <span style={{ fontSize: "0.8em", marginLeft: 2 }}>GB/s</span>
+              </span>
             </div>
             <div
-              className="w-full flex items-center justify-start border-b border-l"
+              className="w-full flex flex-col items-start justify-center border-b border-l"
               style={{
                 borderColor: "#333B4480",
                 borderLeft: "1px solid #333B4480",
@@ -269,7 +308,11 @@ export default function Performance() {
                 height: "33%",
               }}
             >
-              <span style={{ color: "#00A3CA", marginLeft: 8 }}>Write</span>
+              <span className="text-xs text-left pl-2 pt-1 pb-0" style={{ color: "#A6AAAE" }}>Write</span>
+              <span style={{ color: "#00A3CA", marginLeft: 8 }}>
+                {latestThroughput?.write}
+                <span style={{ fontSize: "0.8em", marginLeft: 2 }}>GB/s</span>
+              </span>
             </div>
           </div>
           <div className="w-full" style={{ height: "18%" }}></div>
