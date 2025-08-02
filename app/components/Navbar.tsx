@@ -18,21 +18,34 @@ export default function Navbar() {
 		<div className="min-h-screen h-full w-64 bg-[#242C35] text-white flex flex-col p-4 gap-2 sticky top-0">
 			<NavbarHeader />
 			<Divider />
-			<ul className="list-disc flex-1">
+			<ul className="flex-1 pl-0">
 				{menuItems.map((item) => {
 					const isActive = pathname === item.path;
 					return (
-						<li key={item.path} className={"mb-2"}>
+						<li
+							key={item.path}
+							className={`mb-2 list-none rounded-md relative ${
+								isActive ? "bg-[#13181E]" : ""
+							}`}
+						>
 							<Link
 								href={item.path}
-								className={`block p-3 rounded-md transition-colors ${
+								className={`flex items-center p-3 rounded-md transition-colors ${
 									isActive
-										? "bg-[#13181E]"
+										? "bg-transparent"
 										: "bg-[#242C35] hover:bg-gray-800"
 								}`}
 							>
-								{item.name}
+								{/* Bullet point always same color */}
+								<span className="mr-3 h-2 w-2 rounded-full bg-[#858B90]" />
+								<span>{item.name}</span>
 							</Link>
+							{isActive && (
+								<span
+									className="absolute right-0 top-0 bottom-0 w-1 rounded-r bg-[#0098C5]"
+									style={{ minHeight: "40px" }}
+								/>
+							)}
 						</li>
 					);
 				})}
