@@ -66,11 +66,11 @@ export default function Navbar() {
 			<Divider />
 			<div className="flex items-center mt-2">
 				<InfoIcon className="h-5 w-5 text-gray-400" />
-				<div className="relative ml-2">
+				<div className="relative ml-2 flex-1">
 					<select
 						value={selectedUser}
 						onChange={e => setSelectedUser(e.target.value)}
-						className="bg-[#242C35] text-sm text-gray-300 font-nunito pr-7 pl-2 py-1 rounded appearance-none outline-none"
+						className="bg-[#242C35] text-base text-gray-300 font-nunito pr-8 pl-2 py-1 rounded appearance-none outline-none w-full"
 						style={{
 							WebkitAppearance: "none",
 							MozAppearance: "none",
@@ -83,7 +83,7 @@ export default function Navbar() {
 							</option>
 						))}
 					</select>
-					<ChevronDownIcon className="pointer-events-none absolute right-1 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+					<ChevronDownIcon className="pointer-events-none absolute right-2 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
 				</div>
 			</div>
 		</div>
