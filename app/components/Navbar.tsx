@@ -68,6 +68,7 @@ export default function Navbar() {
 				<InfoIcon className="h-5 w-5 text-gray-400" />
 				<div className="relative ml-2 flex-1">
 					<select
+						data-testid="user-select"
 						value={selectedUser}
 						onChange={e => setSelectedUser(e.target.value)}
 						className="bg-[#242C35] text-base text-gray-300 font-nunito pr-8 pl-2 py-1 rounded appearance-none outline-none w-full"
