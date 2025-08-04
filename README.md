@@ -63,7 +63,7 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 
 ## Running Tests
 
-This project uses [Jest](https://jestjs.io/) and [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/) for unit and integration tests.
+This project uses [Jest](https://jestjs.io/) for unit and integration tests.
 
 ### To run all tests:
 
