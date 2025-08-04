@@ -16,7 +16,10 @@ A modern dashboard for monitoring cluster performance and managing snapshot poli
 
 ## Screenshots
 
-_Add screenshots or GIFs of the dashboard and forms here!_
+![Dashboard Screenshot](public/screenshot-dashboard.png)
+
+
+![Snapshot Policy Editor](public/screenshot-snapshot.png)
 
 ---
 
